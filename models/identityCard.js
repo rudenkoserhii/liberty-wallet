@@ -1,24 +1,28 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const userValidationSchema = Joi.object({
-  userName: Joi.string().min(3).max(32).required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(7).max(32).required(),
-  location: Joi.string().required(),
-  phone: Joi.string().length(13).required(),
-  birtday: Joi.date(),
-  avatar: Joi.string().uri(),
+const identityCardValidationSchema = Joi.object({
+  identityCard: Joi.string()
+    .valid("passport", "id-card", "driving license")
+    .required(),
+  series: Joi.string().required(),
+  number: Joi.number().max(32).required(),
+  validUntil: Joi.date(),
+  dateIssue: Joi.date(),
+  autorIssue: Joi.string().min(7).max(32).required(),
+  taxNumber: Joi.number().length(10),
 });
 
-const userUpdateValidationSchema = Joi.object({
-  userName: Joi.string().min(3).max(32),
-  email: Joi.string().email(),
-  password: Joi.string().min(7).max(32),
-  location: Joi.string(),
-  phone: Joi.string().length(13),
-  birthday: Joi.date(),
-  avatar: Joi.string().uri(),
+const identityCardUpdateValidationSchema = Joi.object({
+  identityCard: Joi.string()
+    .valid("passport", "id-card", "driving license")
+    .required(),
+  series: Joi.string().required(),
+  number: Joi.number().max(32).required(),
+  validUntil: Joi.date(),
+  dateIssue: Joi.date(),
+  autorIssue: Joi.string().min(7).max(32).required(),
+  taxNumber: Joi.number().length(10),
 });
 
 const identityCardSchema = new mongoose.Schema(
@@ -65,6 +69,10 @@ const identityCardSchema = new mongoose.Schema(
   }
 );
 
-const Users = mongoose.model("users", UsersSchema);
+const IdentityCard = mongoose.model("identityCard", identityCardSchema);
 
-module.exports = { Users, userValidationSchema, userUpdateValidationSchema };
+module.exports = {
+  IdentityCard,
+  identityCardValidationSchema,
+  identityCardUpdateValidationSchema,
+};

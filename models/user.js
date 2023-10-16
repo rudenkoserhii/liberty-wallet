@@ -7,9 +7,9 @@ const userValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(7).max(32).required(),
   firstName: Joi.string().min(3).max(32).required(),
+  nickName: Joi.string().min(3).max(32).required(),
   lastName: Joi.string().min(3).max(32).required(),
   surName: Joi.string().min(3).max(32).required(),
-  nickName: Joi.string().min(3).max(32).required(),
   phone: Joi.string().length(13).required(),
   employmentType: Joi.string().required(),
   workExperience: Joi.string().required(),
@@ -21,15 +21,16 @@ const userValidationSchema = Joi.object({
     .max(10)
     .required(),
   birthday: Joi.date(),
+  avatar: Joi.string().uri(),
 });
 
 const userUpdateValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(7).max(32).required(),
+  nickName: Joi.string().min(3).max(32).required(),
   firstName: Joi.string().min(3).max(32).required(),
   lastName: Joi.string().min(3).max(32).required(),
   surName: Joi.string().min(3).max(32).required(),
-  nickName: Joi.string().min(3).max(32).required(),
   phone: Joi.string().length(13).required(),
   employmentType: Joi.string().required(),
   workExperience: Joi.string().required(),
@@ -41,6 +42,7 @@ const userUpdateValidationSchema = Joi.object({
     .max(10)
     .required(),
   birthday: Joi.date(),
+  avatar: Joi.string().uri(),
 });
 
 const userSchema = new mongoose.Schema(
@@ -54,6 +56,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Set password"],
     },
+    nickName: {
+      type: String,
+      required: [true, "Set user surname"],
+      unique: true,
+    },
     firstName: {
       type: String,
       required: [true, "Set user firstname"],
@@ -63,10 +70,6 @@ const userSchema = new mongoose.Schema(
       required: [true, "Set user lastname"],
     },
     surName: {
-      type: String,
-      required: [true, "Set user surname"],
-    },
-    nickName: {
       type: String,
       required: [true, "Set user surname"],
     },
@@ -94,6 +97,10 @@ const userSchema = new mongoose.Schema(
     birthday: {
       type: Date,
       required: [true, "Set birthday user"],
+    },
+    avatar: {
+      type: mongoose.SchemaTypes.Url,
+      default: "",
     },
     isActivate: {
       type: Boolean,
